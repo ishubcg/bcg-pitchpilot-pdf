@@ -1,0 +1,52 @@
+{
+  "products": [
+    {
+      "id": "ILL",
+      "name": "Internet Leased Line",
+      "pdf": "ILL.pdf",
+      "industries": ["Banking", "Retail", "IT", "Manufacturing"],
+      "min_bandwidth_mbps": 10,
+      "budget_tier": "smb",
+      "synergy": ["SDWAN"],
+      "ideal_size_min": 10,
+      "ideal_size_max": 500,
+      "ideal_bandwidth_min": 10,
+      "ideal_bandwidth_max": 500,
+      "talk_track": "Dedicated, SLA-backed internet access for HQ and key branches."
+    },
+    {
+      "id": "MPLS",
+      "name": "MPLS VPN",
+      "pdf": "MPLS.pdf",
+      "industries": ["Banking", "Manufacturing", "Govt."],
+      "min_bandwidth_mbps": 50,
+      "budget_tier": "mid",
+      "synergy": ["SDWAN"],
+      "ideal_size_min": 50,
+      "ideal_size_max": 2000,
+      "ideal_bandwidth_min": 20,
+      "ideal_bandwidth_max": 1000,
+      "talk_track": "Private, secure connectivity between branches and data centres."
+    },
+    {
+      "id": "SDWAN",
+      "name": "SD-WAN",
+      "pdf": "SDWAN.pdf",
+      "industries": ["Banking", "Retail", "IT", "Services"],
+      "min_bandwidth_mbps": 50,
+      "budget_tier": "enterprise",
+      "synergy": ["ILL", "cloudsec"],
+      "ideal_size_min": 100,
+      "ideal_size_max": 5000,
+      "ideal_bandwidth_min": 50,
+      "ideal_bandwidth_max": 5000,
+      "talk_track": "Application-aware WAN that optimises link usage and performance."
+    }
+  ],
+  "industries": [
+    { "id": "Banking", "name": "Banking", "pdf": "industry_banking.pdf" },
+    { "id": "Retail", "name": "Retail", "pdf": "industry_retail.pdf" },
+    { "id": "IT", "name": "IT", "pdf": "industry_it.pdf" },
+    { "id": "Manufacturing", "name": "Manufacturing", "pdf": "industry_manufacturing.pdf" }
+  ]
+}

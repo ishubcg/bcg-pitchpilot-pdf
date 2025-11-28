@@ -1,0 +1,7 @@
+Timestamp,Client Name,Nam/Kam,Industry,Size,Annual Budget (INR),Products Already Sold,Recommended Products,Is Combined Pitch Generated
+2025-11-26 17:54:49,abc,xyz,Banking,200,10000000,SDWAN,"MPLS,ILL",1
+2025-11-26 18:45:47,abc,xyz,Banking,500,10000000,ILL,"SDWAN,MPLS",1
+2025-11-26 20:23:54,ABC,XYZ,Banking,200,10000000,ILL,"SDWAN,MPLS",1
+2025-11-26 20:25:32,XYZ,ABC,Banking,300,10000000,MPLS,"SDWAN,ILL",1
+2025-11-26 21:29:46,ABC,XYZ,Banking,200,10000000,ILL,"SDWAN,MPLS",1
+2025-11-27 11:33:28,ishu,ishu,Banking,50,10000000,SDWAN,"MPLS,ILL",1
