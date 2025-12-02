@@ -1,5 +1,5 @@
-const API_BASE = 'https://bcg-pitchpilot-backend.onrender.com';
-
+const API_BASE = 'http://localhost:8000';
+// const API_BASE = 'https://bcg-pitchpilot-backend.onrender.com';
 
 const api = {
   async catalog() {
@@ -42,7 +42,11 @@ const api = {
   }
 };
 
-const state = { soldProducts: new Set() };
+const state = {
+  soldProducts: new Set(),
+  productMap: {},
+  allProducts: []
+};
 
 function toast(message) {
   const t = document.getElementById('toast');
@@ -60,15 +64,19 @@ function setLoading(v) {
 function renderSoldTags() {
   const container = document.getElementById('sold_products_tags');
   container.innerHTML = '';
+  
   state.soldProducts.forEach(id => {
+    const name = state.productMap[id] || id;
     const chip = document.createElement('div');
-    chip.className = 'inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-200 text-slate-800 text-xs font-medium';
+    chip.className =
+      'inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-200 text-slate-800 text-xs font-medium';
     chip.innerHTML = `
-      <span>${id}</span>
+      <span>${name}</span>
       <button type="button" class="text-slate-500 hover:text-slate-800 text-xs" data-id="${id}">&times;</button>
     `;
     container.appendChild(chip);
   });
+
   container.querySelectorAll('button[data-id]').forEach(btn => {
     btn.addEventListener('click', () => {
       const id = btn.getAttribute('data-id');
@@ -83,10 +91,11 @@ function renderRecommendations(data) {
   const list = document.getElementById('reco-list');
   list.innerHTML = '';
 
+  // ----- Show recommended product names & talking points -----
   (data.recommended || []).forEach((rec, index) => {
     const block = document.createElement('div');
     block.innerHTML = `
-      <div class="font-semibold text-slate-800">${index + 1}. ${rec.id} – ${rec.name}</div>
+      <div class="font-semibold text-slate-800">${index + 1}. ${rec.name}</div>
       <ul class="list-disc pl-5 text-slate-700 mt-1">
         ${(rec.talking_points || []).map(tp => `<li>${tp}</li>`).join('')}
       </ul>
@@ -94,6 +103,39 @@ function renderRecommendations(data) {
     list.appendChild(block);
   });
 
+  // ----- Download ANY product section -----
+  const allSection = document.createElement('div');
+  allSection.className = 'mt-8 border-t pt-4';
+  allSection.innerHTML = `
+    <h4 class="text-sm font-semibold text-slate-800 mb-2">
+      Download Any Product Pitch Deck
+    </h4>
+    <div id="all-product-downloads" class="flex flex-wrap gap-3"></div>
+  `;
+  list.appendChild(allSection);
+
+  const allBtnContainer = allSection.querySelector('#all-product-downloads');
+
+  (state.allProducts || []).forEach(prod => {
+    const btn = document.createElement('button');
+    btn.className =
+      'px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-xl text-xs font-medium shadow-soft';
+    btn.textContent = prod.name;
+
+    btn.addEventListener('click', () => {
+      const url = `${API_BASE}/api/product-pitch/${prod.id}`;
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${prod.name}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    });
+
+    allBtnContainer.appendChild(btn);
+  });
+
+  // Show panel
   const hasRecs = (data.recommended || []).length > 0;
   panel.classList.toggle('hidden', !hasRecs);
   if (hasRecs) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -103,6 +145,10 @@ async function init() {
   try {
     const data = await api.catalog();
 
+    // Save full product catalog
+    state.allProducts = data.products || [];
+
+    // Populate industry dropdown
     const industrySel = document.getElementById('industry');
     (data.industries || []).forEach(i => {
       const opt = document.createElement('option');
@@ -111,17 +157,26 @@ async function init() {
       industrySel.appendChild(opt);
     });
 
+    // Populate budget dropdown (NO DUPLICATES)
+    const budgetSel = document.getElementById('budget_band');
+    // Do NOT append more options — index.html already contains Low/Medium/High
+
+    // Build product map + sold dropdown
+    state.productMap = {};
     const soldSel = document.getElementById('sold_products_select');
     soldSel.innerHTML = '';
+
     const placeholderOpt = document.createElement('option');
     placeholderOpt.value = '';
     placeholderOpt.textContent = 'Select a product to mark as sold';
     soldSel.appendChild(placeholderOpt);
 
-    (data.product_ids || []).forEach(pid => {
+    (data.product_ids || []).forEach(item => {
+      state.productMap[item.id] = item.name;
+
       const opt = document.createElement('option');
-      opt.value = pid;
-      opt.textContent = pid;
+      opt.value = item.id;
+      opt.textContent = item.name;
       soldSel.appendChild(opt);
     });
 
@@ -133,6 +188,7 @@ async function init() {
         soldSel.value = '';
       }
     });
+
   } catch (e) {
     const err = document.getElementById('error');
     err.textContent = e.message;
@@ -142,18 +198,18 @@ async function init() {
 
 document.getElementById('btn-generate').addEventListener('click', async () => {
   const industry = document.getElementById('industry').value;
-  const budget = Number(document.getElementById('budget').value || '0');
+  const budget_band = document.getElementById('budget_band').value;
   const sizeVal = document.getElementById('size').value;
   const size = sizeVal ? Number(sizeVal) : null;
   const client_name = document.getElementById('client_name').value || null;
   const nam_name = document.getElementById('nam_name').value || null;
 
-  const bandwidth_mbps = 100; // fixed for scoring
+  const bandwidth_mbps = 100;
   const products_already_sold = Array.from(state.soldProducts);
 
   const payload = {
     industry,
-    annual_budget_inr: budget,
+    budget_band,
     bandwidth_mbps,
     size,
     products_already_sold,
@@ -164,6 +220,12 @@ document.getElementById('btn-generate').addEventListener('click', async () => {
   const err = document.getElementById('error');
   err.classList.add('hidden');
   err.textContent = '';
+
+  if (!industry || !budget_band) {
+    err.textContent = 'Please select both Industry and Budget Band.';
+    err.classList.remove('hidden');
+    return;
+  }
 
   setLoading(true);
   try {

@@ -1,52 +1,544 @@
 {
-  "products": [
-    {
-      "id": "ILL",
+  "products": {
+    "ILL": {
       "name": "Internet Leased Line",
       "pdf": "ILL.pdf",
-      "industries": ["Banking", "Retail", "IT", "Manufacturing"],
-      "min_bandwidth_mbps": 10,
-      "budget_tier": "smb",
-      "synergy": ["SDWAN"],
-      "ideal_size_min": 10,
-      "ideal_size_max": 500,
-      "ideal_bandwidth_min": 10,
-      "ideal_bandwidth_max": 500,
-      "talk_track": "Dedicated, SLA-backed internet access for HQ and key branches."
+      "talk_track": [
+        "Dedicated, SLA-backed internet access for critical locations such as HQ, data centres, and core branches.",
+        "Ideal where predictable bandwidth and low latency are more important than lowest cost."
+      ]
     },
-    {
-      "id": "MPLS",
-      "name": "MPLS VPN",
+    "BULK_FTTH": {
+      "name": "Bulk FTTH",
+      "pdf": "Bulk_FTTH.pdf",
+      "talk_track": [
+        "Cost-effective broadband for dense user locations such as campuses, RWAs, hostels and hotels.",
+        "Good fit where per-user ARPU is low but aggregate bandwidth demand is high."
+      ]
+    },
+    "SIP": {
+      "name": "SIP",
+      "pdf": "SIP.pdf",
+      "talk_track": [
+        "Modern, IP-based voice trunking that can replace legacy PRI lines.",
+        "Helps consolidate voice, scale channels flexibly and reduce call costs."
+      ]
+    },
+    "IOT": {
+      "name": "IoT Connectivity",
+      "pdf": "IoT.pdf",
+      "talk_track": [
+        "Secure connectivity for sensors, meters and field devices.",
+        "Enables real-time monitoring, tracking and automation across distributed assets."
+      ]
+    },
+    "MPLS": {
+      "name": "MPLS",
       "pdf": "MPLS.pdf",
-      "industries": ["Banking", "Manufacturing", "Govt."],
-      "min_bandwidth_mbps": 50,
-      "budget_tier": "mid",
-      "synergy": ["SDWAN"],
-      "ideal_size_min": 50,
-      "ideal_size_max": 2000,
-      "ideal_bandwidth_min": 20,
-      "ideal_bandwidth_max": 1000,
-      "talk_track": "Private, secure connectivity between branches and data centres."
+      "talk_track": [
+        "Private, secure WAN connectivity between branches, DCs and critical locations.",
+        "Best suited for regulated environments like BFSI, manufacturing and government."
+      ]
+    },
+    "CNPN_PRIVATE_5G": {
+      "name": "CNPN Private 5G",
+      "pdf": "CNPN_Private_5G.pdf",
+      "talk_track": [
+        "Ultra-low-latency, high-reliability private 5G for mission-critical industrial automation.",
+        "Supports robotics, AGVs and dense IoT deployments in mines, ports and large campuses."
+      ]
+    },
+    "VSAT": {
+      "name": "VSAT",
+      "pdf": "VSAT.pdf",
+      "talk_track": [
+        "Satellite-based connectivity for remote or low-coverage locations.",
+        "Ideal as primary or backup link where terrestrial options are limited."
+      ]
+    },
+    "SD_WAN": {
+      "name": "SD WAN",
+      "pdf": "SD_WAN.pdf",
+      "talk_track": [
+        "Application-aware WAN overlay that can use internet, MPLS and 4G/5G links in parallel.",
+        "Improves cloud application performance while optimising overall WAN cost."
+      ]
+    },
+    "DATA_CENTRE_SERVICES": {
+      "name": "Data Centre Services",
+      "pdf": "Data_Centre_Services.pdf",
+      "talk_track": [
+        "Carrier-grade colocation and hosting with strong network integration.",
+        "Suitable for GCCs, IT/ITES and enterprises consolidating workloads into shared DCs."
+      ]
+    },
+    "WIFI": {
+      "name": "Wi-Fi",
+      "pdf": "WiFi.pdf",
+      "talk_track": [
+        "Managed Wi-Fi for consistent, high-quality indoor coverage across large sites.",
+        "Ideal for hotels, campuses, RWAs and retail spaces with roaming users."
+      ]
+    },
+    "CCTV": {
+      "name": "CCTV",
+      "pdf": "CCTV.pdf",
+      "talk_track": [
+        "End-to-end CCTV and surveillance connectivity for campuses, RWAs and public spaces.",
+        "Helps enhance security, compliance and incident investigation."
+      ]
+    },
+    "ISDN_PRI_SERVICES": {
+      "name": "ISDN PRI Services",
+      "pdf": "ISDN_PRI_Services.pdf",
+      "talk_track": [
+        "Reliable PRI lines for enterprises with existing PBX investments.",
+        "Good option where migration to full SIP is planned but not yet completed."
+      ]
+    },
+    "BULK_SMS_CPAAS": {
+      "name": "Bulk SMS (OTP/CPaaS)",
+      "pdf": "Bulk_SMS_CPaaS.pdf",
+      "talk_track": [
+        "Enterprise-grade bulk SMS for OTP, alerts and campaign messages.",
+        "Critical for e-commerce and BFSI journeys where timely customer notification matters."
+      ]
+    }
+  },
+
+  "industry_budget_matrix": [
+    {
+      "industry": "Educational Institutions",
+      "budget": "Low",
+      "product_order": ["BULK_FTTH", "ILL", "SIP"],
+      "logic": "Low -> Med -> High",
+      "talk_track": [
+        "For low-budget educational institutions, the focus is on maximising coverage at minimal cost.",
+        "Bulk FTTH serves hostels and classrooms, with ILL and SIP added later as the campus matures."
+      ]
     },
     {
-      "id": "SDWAN",
-      "name": "SD-WAN",
-      "pdf": "SDWAN.pdf",
-      "industries": ["Banking", "Retail", "IT", "Services"],
-      "min_bandwidth_mbps": 50,
-      "budget_tier": "enterprise",
-      "synergy": ["ILL", "cloudsec"],
-      "ideal_size_min": 100,
-      "ideal_size_max": 5000,
-      "ideal_bandwidth_min": 50,
-      "ideal_bandwidth_max": 5000,
-      "talk_track": "Application-aware WAN that optimises link usage and performance."
+      "industry": "Educational Institutions",
+      "budget": "Medium",
+      "product_order": ["ILL", "SIP", "BULK_FTTH"],
+      "logic": "Med -> High -> Low",
+      "talk_track": [
+        "Medium-budget institutions balance reliability and cost.",
+        "ILL secures core academic and admin traffic, with SIP enabling scalable voice and Bulk FTTH for student access."
+      ]
+    },
+    {
+      "industry": "Educational Institutions",
+      "budget": "High",
+      "product_order": ["SIP", "ILL", "BULK_FTTH"],
+      "logic": "High -> Med -> Low",
+      "talk_track": [
+        "High-budget universities push for fully digital campuses.",
+        "SIP and ILL together support unified communications, remote learning and always-on connectivity."
+      ]
+    },
+
+    {
+      "industry": "Coal",
+      "budget": "Low",
+      "product_order": ["IOT", "MPLS", "CNPN_PRIVATE_5G"],
+      "logic": "Low -> Med -> High",
+      "talk_track": [
+        "Entry-level coal operations start with basic IoT telemetry and secure backhaul.",
+        "IoT plus MPLS provides a secure foundation, with Private 5G as a future upgrade for automation."
+      ]
+    },
+    {
+      "industry": "Coal",
+      "budget": "Medium",
+      "product_order": ["MPLS", "CNPN_PRIVATE_5G", "IOT"],
+      "logic": "Med -> High -> Low",
+      "talk_track": [
+        "Medium-budget mines look for more automation and centralised control.",
+        "MPLS secures traffic to control rooms while Private 5G pilots high-density sensors and robotics."
+      ]
+    },
+    {
+      "industry": "Coal",
+      "budget": "High",
+      "product_order": ["CNPN_PRIVATE_5G", "MPLS", "IOT"],
+      "logic": "High -> Med -> Low",
+      "talk_track": [
+        "High-budget coal operations can justify a fully private 5G network.",
+        "Private 5G empowers autonomous vehicles, safety systems and real-time production visibility."
+      ]
+    },
+
+    {
+      "industry": "Ports",
+      "budget": "Low",
+      "product_order": ["MPLS", "VSAT", "CNPN_PRIVATE_5G"],
+      "logic": "Low -> Med -> High",
+      "talk_track": [
+        "At low budgets, ports prioritise secure connectivity for core systems and remote jetties.",
+        "MPLS handles terminal operations while VSAT ensures backup in remote berths."
+      ]
+    },
+    {
+      "industry": "Ports",
+      "budget": "Medium",
+      "product_order": ["VSAT", "CNPN_PRIVATE_5G", "MPLS"],
+      "logic": "Med -> High -> Low",
+      "talk_track": [
+        "Medium budgets allow ports to expand automation and tracking.",
+        "VSAT plus Private 5G ensures robust coverage across yards and warehouses."
+      ]
+    },
+    {
+      "industry": "Ports",
+      "budget": "High",
+      "product_order": ["CNPN_PRIVATE_5G", "VSAT", "MPLS"],
+      "logic": "High -> Med -> Low",
+      "talk_track": [
+        "Smart ports use Private 5G for cranes, AGVs and IoT, with VSAT and MPLS as resilience layers.",
+        "This stack supports real-time operations, safety and optimisation."
+      ]
+    },
+
+    {
+      "industry": "Banks",
+      "budget": "Low",
+      "product_order": ["ILL", "SD_WAN", "MPLS"],
+      "logic": "Low -> Med -> High",
+      "talk_track": [
+        "Smaller banks and co-ops need reliable but cost-conscious connectivity.",
+        "ILL at key sites with SD WAN overlay gives them security and flexibility without full MPLS everywhere."
+      ]
+    },
+    {
+      "industry": "Banks",
+      "budget": "Medium",
+      "product_order": ["SD_WAN", "MPLS", "ILL"],
+      "logic": "Med -> High -> Low",
+      "talk_track": [
+        "Mid-sized banks mix SD WAN and MPLS to support both core banking and cloud workloads.",
+        "SD WAN brings agility while MPLS backs critical regional hubs."
+      ]
+    },
+    {
+      "industry": "Banks",
+      "budget": "High",
+      "product_order": ["MPLS", "SD_WAN", "ILL"],
+      "logic": "High -> Med -> Low",
+      "talk_track": [
+        "Large banks with high regulatory exposure favour MPLS for strong SLAs.",
+        "SIP and PRI complement this with robust, compliant voice infrastructure."
+      ]
+    },
+
+    {
+      "industry": "GCCs",
+      "budget": "Low",
+      "product_order": ["ILL", "SD_WAN", "DATA_CENTRE_SERVICES"],
+      "logic": "Low -> Med -> High",
+      "talk_track": [
+          "Global capability centres start with reliable internet and basic SD WAN overlay.",
+          "DC services can be phased in later as workloads consolidate."
+      ]
+    },
+    {
+      "industry": "GCCs",
+      "budget": "Medium",
+      "product_order": ["SD_WAN", "DATA_CENTRE_SERVICES", "ILL"],
+      "logic": "Med -> High -> Low",
+      "talk_track": [
+          "Medium-budget GCCs focus on performance for global users.",
+          "SD WAN optimises cloud/SaaS traffic while DC services host critical workloads."
+      ]
+    },
+    {
+      "industry": "GCCs",
+      "budget": "High",
+      "product_order": ["DATA_CENTRE_SERVICES", "SD_WAN", "ILL"],
+      "logic": "High -> Med -> Low",
+      "talk_track": [
+          "High-end GCCs run large shared platforms for multiple geographies.",
+          "DC services plus SD WAN create a resilient, high-performance core network."
+      ]
+    },
+
+    {
+      "industry": "Hotels",
+      "budget": "Low",
+      "product_order": ["BULK_FTTH", "SIP", "ILL"],
+      "logic": "Low -> Med -> High",
+      "talk_track": [
+        "Budget hotels prioritise guest Wi-Fi and basic voice.",
+        "Bulk FTTH keeps costs low; SIP can front-desk and back-office voice."
+      ]
+    },
+    {
+      "industry": "Hotels",
+      "budget": "Medium",
+      "product_order": ["SIP", "ILL", "BULK_FTTH"],
+      "logic": "Med -> High -> Low",
+      "talk_track": [
+        "Mid-scale hotels want better SLAs and richer guest experience.",
+        "SIP plus ILL supports contact centre, booking engines and premium Wi-Fi."
+      ]
+    },
+    {
+      "industry": "Hotels",
+      "budget": "High",
+      "product_order": ["ILL", "SIP", "BULK_FTTH"],
+      "logic": "High -> Med -> Low",
+      "talk_track": [
+        "Premium hotels require always-on connectivity for guests and operations.",
+        "ILL underpins everything; SIP and Bulk FTTH layer on top for voice and guest internet."
+      ]
+    },
+
+    {
+      "industry": "Hospitals",
+      "budget": "Low",
+      "product_order": ["SIP", "BULK_FTTH", "ILL"],
+      "logic": "Low -> Med -> High",
+      "talk_track": [
+        "Entry-level hospitals prioritise voice and moderate internet.",
+        "SIP helps with appointment, helpdesk and ICU coordination while Bulk FTTH addresses basic data needs."
+      ]
+    },
+    {
+      "industry": "Hospitals",
+      "budget": "Medium",
+      "product_order": ["BULK_FTTH", "ILL", "SIP"],
+      "logic": "Med -> High -> Low",
+      "talk_track": [
+        "As digital health grows, hospitals need more stable connectivity.",
+        "Bulk FTTH plus ILL enables EMR, telemedicine and PACS access."
+      ]
+    },
+    {
+      "industry": "Hospitals",
+      "budget": "High",
+      "product_order": ["ILL", "BULK_FTTH", "SIP"],
+      "logic": "High -> Med -> Low",
+      "talk_track": [
+        "Tier-1 hospitals need mission-critical uptime for clinical and imaging systems.",
+        "ILL ensures low-latency access to applications; Bulk FTTH serves patient and attendant usage."
+      ]
+    },
+
+    {
+      "industry": "RWAs, Welfare",
+      "budget": "Low",
+      "product_order": ["BULK_FTTH", "WIFI", "CCTV"],
+      "logic": "Low -> Med -> High",
+      "talk_track": [
+        "RWAs with limited budgets start with shared broadband for residents.",
+        "Bulk FTTH and basic Wi-Fi cover common areas; CCTV can be added as budgets grow."
+      ]
+    },
+    {
+      "industry": "RWAs, Welfare",
+      "budget": "Medium",
+      "product_order": ["WIFI", "CCTV", "BULK_FTTH"],
+      "logic": "Med -> High -> Low",
+      "talk_track": [
+        "Medium-budget societies want both connectivity and security.",
+        "Managed Wi-Fi ensures consistent experience; CCTV strengthens perimeter and common-area safety."
+      ]
+    },
+    {
+      "industry": "RWAs, Welfare",
+      "budget": "High",
+      "product_order": ["CCTV", "WIFI", "BULK_FTTH"],
+      "logic": "High -> Med -> Low",
+      "talk_track": [
+        "Premium RWAs position security as a differentiator.",
+        "CCTV takes priority with managed Wi-Fi and FTTH complementing the digital lifestyle experience."
+      ]
+    },
+
+    {
+      "industry": "Housing & Real Estate",
+      "budget": "Low",
+      "product_order": ["BULK_FTTH", "WIFI", "CCTV"],
+      "logic": "Low -> Med -> High",
+      "talk_track": [
+        "Developers at low budget levels start with basic digital amenities.",
+        "Bulk FTTH and Wi-Fi provide value-add for residents; CCTV can be upsold as a phase-2 service."
+      ]
+    },
+    {
+      "industry": "Housing & Real Estate",
+      "budget": "Medium",
+      "product_order": ["WIFI", "CCTV", "BULK_FTTH"],
+      "logic": "Med -> High -> Low",
+      "talk_track": [
+        "Mid-segment projects differentiate with integrated Wi-Fi and security.",
+        "CCTV and Wi-Fi are positioned as part of the smart residential offering."
+      ]
+    },
+    {
+      "industry": "Housing & Real Estate",
+      "budget": "High",
+      "product_order": ["CCTV", "WIFI", "BULK_FTTH"],
+      "logic": "High -> Med -> Low",
+      "talk_track": [
+        "Premium real-estate projects push a full smart-community narrative.",
+        "High-priority CCTV and Wi-Fi combined with FTTH enable smart home and IoT use cases."
+      ]
+    },
+
+    {
+      "industry": "Automotive Industry",
+      "budget": "Low",
+      "product_order": ["BULK_FTTH", "IOT", "MPLS"],
+      "logic": "Low -> Med -> High",
+      "talk_track": [
+        "Smaller automotive units start with basic connectivity and pilot IoT.",
+        "Bulk FTTH and IoT SIMs help digitalise selected lines before a full WAN refresh."
+      ]
+    },
+    {
+      "industry": "Automotive Industry",
+      "budget": "Medium",
+      "product_order": ["IOT", "BULK_FTTH", "MPLS"],
+      "logic": "Med -> High -> Low",
+      "talk_track": [
+        "At medium budgets, plants invest more heavily in IoT for production visibility.",
+        "MPLS then ties plants to central systems with predictable performance."
+      ]
+    },
+    {
+      "industry": "Automotive Industry",
+      "budget": "High",
+      "product_order": ["MPLS", "IOT", "BULK_FTTH"],
+      "logic": "High -> Med -> Low",
+      "talk_track": [
+        "Large OEMs rely on MPLS for global supply-chain integration.",
+        "IoT and FTTH-based connectivity support smart factory and vendor collaboration."
+      ]
+    },
+
+    {
+      "industry": "Consumer Goods",
+      "budget": "Low",
+      "product_order": ["ISDN_PRI_SERVICES", "SIP", "MPLS"],
+      "logic": "Low -> Med -> High",
+      "talk_track": [
+        "Legacy-heavy FMCG organisations often start with PRI and basic MPLS sites.",
+        "SIP can be proposed as a future migration path to modern voice."
+      ]
+    },
+    {
+      "industry": "Consumer Goods",
+      "budget": "Medium",
+      "product_order": ["SIP", "ISDN_PRI_SERVICES", "MPLS"],
+      "logic": "Med -> High -> Low",
+      "talk_track": [
+        "Medium budgets allow migration from PRI to SIP while retaining MPLS for key locations.",
+        "This balances transformation with risk management."
+      ]
+    },
+    {
+      "industry": "Consumer Goods",
+      "budget": "High",
+      "product_order": ["MPLS", "SIP", "ISDN_PRI_SERVICES"],
+      "logic": "High -> Med -> Low",
+      "talk_track": [
+        "Large FMCG players run extensive distribution and sales networks.",
+        "MPLS is positioned as the core WAN with SIP and residual PRI supporting voice across regions."
+      ]
+    },
+
+    {
+      "industry": "Energy",
+      "budget": "Low",
+      "product_order": ["ISDN_PRI_SERVICES", "MPLS", "VSAT"],
+      "logic": "Low -> Med -> High",
+      "talk_track": [
+        "Energy customers with constrained budgets keep a conservative tech stack.",
+        "PRI and MPLS serve key offices; VSAT is proposed for remote fields as they expand."
+      ]
+    },
+    {
+      "industry": "Energy",
+      "budget": "Medium",
+      "product_order": ["MPLS", "VSAT", "ISDN_PRI_SERVICES"],
+      "logic": "Med -> High -> Low",
+      "talk_track": [
+        "Medium budgets allow broader connectivity to remote assets.",
+        "MPLS plus VSAT ensures field operations stay connected even in remote geographies."
+      ]
+    },
+    {
+      "industry": "Energy",
+      "budget": "High",
+      "product_order": ["VSAT", "MPLS", "ISDN_PRI_SERVICES"],
+      "logic": "High -> Med -> Low",
+      "talk_track": [
+        "High-budget energy enterprises heavily depend on field uptime.",
+        "VSAT-backed connectivity sits alongside MPLS for resilient operations."
+      ]
+    },
+
+    {
+      "industry": "E-Commerce",
+      "budget": "Low",
+      "product_order": ["BULK_SMS_CPAAS", "SIP", "MPLS"],
+      "logic": "Low -> Med -> High",
+      "talk_track": [
+        "Smaller e-commerce firms start with communication-heavy use cases like OTP and notifications.",
+        "Bulk SMS/CPaaS and SIP give them reach while MPLS can be added for core sites later."
+      ]
+    },
+    {
+      "industry": "E-Commerce",
+      "budget": "Medium",
+      "product_order": ["SIP", "BULK_SMS_CPAAS", "MPLS"],
+      "logic": "Med -> High -> Low",
+      "talk_track": [
+        "Growing players need reliable customer support and notification flows.",
+        "SIP supports support centres while CPaaS manages OTP and marketing journeys."
+      ]
+    },
+    {
+      "industry": "E-Commerce",
+      "budget": "High",
+      "product_order": ["MPLS", "SIP", "BULK_SMS_CPAAS"],
+      "logic": "High -> Med -> Low",
+      "talk_track": [
+        "Large e-commerce platforms require secure backbone connectivity and omnichannel engagement.",
+        "MPLS interconnects DCs and warehouses, with SIP and CPaaS powering communications."
+      ]
+    },
+
+    {
+      "industry": "Manufacturing",
+      "budget": "Low",
+      "product_order": ["ILL", "MPLS", "SD_WAN"],
+      "logic": "Low -> Med -> High",
+      "talk_track": [
+        "Entry-level manufacturing sites need stable connectivity for ERP and logistics.",
+        "ILL at plants with MPLS to HQ is a strong starting point."
+      ]
+    },
+    {
+      "industry": "Manufacturing",
+      "budget": "Medium",
+      "product_order": ["MPLS", "SD_WAN", "ILL"],
+      "logic": "Med -> High -> Low",
+      "talk_track": [
+        "Mid-sized manufacturers introduce SD WAN for better cloud and multi-plant routing.",
+        "MPLS remains the secure backbone for production-critical applications."
+      ]
+    },
+    {
+      "industry": "Manufacturing",
+      "budget": "High",
+      "product_order": ["SD_WAN", "MPLS", "ILL"],
+      "logic": "High -> Med -> Low",
+      "talk_track": [
+        "Advanced manufacturers run smart factories and multi-cloud workloads.",
+        "SD WAN orchestrates traffic across MPLS and internet, optimising cost and performance."
+      ]
     }
-  ],
-  "industries": [
-    { "id": "Banking", "name": "Banking", "pdf": "industry_banking.pdf" },
-    { "id": "Retail", "name": "Retail", "pdf": "industry_retail.pdf" },
-    { "id": "IT", "name": "IT", "pdf": "industry_it.pdf" },
-    { "id": "Manufacturing", "name": "Manufacturing", "pdf": "industry_manufacturing.pdf" }
   ]
 }
