@@ -14,6 +14,7 @@ from recommender import (
     INDUSTRIES,
     ALL_PRODUCT_IDS,
     recommend_products,
+    industry_to_pdf_name,   # NEW IMPORT
 )
 from pdf_tools import merge_pitch_pdfs
 
@@ -189,8 +190,12 @@ def generate(req: GenerateRequest):
     if not os.path.exists(skeleton_full):
         raise HTTPException(status_code=500, detail=f"Skeleton PDF not found at {skeleton_full}.")
 
-    # At the moment, no separate industry PDF is passed. You can add later.
-    industry_full = None
+    # Resolve industry PDF based on industry name
+    industry_pdf_name = industry_to_pdf_name(result["industry"])
+    industry_full = os.path.join(PRODUCT_FOLDER, industry_pdf_name)
+    if not os.path.exists(industry_full):
+        # If not present, skip industry deck
+        industry_full = None
 
     product_full_paths = [os.path.join(PRODUCT_FOLDER, p) for p in product_files]
 
@@ -233,4 +238,3 @@ def download_product_pitch(product_id: str):
         media_type="application/pdf",
         filename=f"{PRODUCTS[pid].name}.pdf"
     )
-

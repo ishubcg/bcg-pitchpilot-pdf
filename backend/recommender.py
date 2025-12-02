@@ -62,6 +62,25 @@ def find_matrix_row(industry: str, budget_band: str) -> Optional[Dict[str, Any]]
     return None
 
 
+def industry_to_pdf_name(industry: str) -> str:
+    """
+    Convert an industry label into a standard PDF file name.
+
+    Example mappings:
+      'Banks' -> 'Banks.pdf'
+      'Educational Institutions' -> 'Educational_Institutions.pdf'
+      'Housing & Real Estate' -> 'Housing_Real_Estate.pdf'
+      'RWAs, Welfare' -> 'RWAs_Welfare.pdf'
+    """
+    safe = (industry or "").strip()
+    # remove special punctuation that shouldn't appear in filenames
+    for ch in ["&", ",", "/", "\\"]:
+        safe = safe.replace(ch, "")
+    # collapse whitespace to underscores
+    safe = "_".join(safe.split())
+    return f"{safe}.pdf"
+
+
 # ---------- Recommendation API ----------
 
 def recommend_products(
