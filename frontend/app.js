@@ -297,12 +297,12 @@ const state = {
 const allowedProducts = [
   "MPLS",
   "ILL",
-  "SDWAN",
+  "SD_WAN",
   "IoT",
   "Dark_Fiber",
   "VSAT",
-  "CNPN",
-  "Data_Center_Services"
+  "CNPN_Private_5G",
+  "Data_Centre_Services"
 ];
 
 function toast(message) {

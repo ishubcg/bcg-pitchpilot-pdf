@@ -72,6 +72,13 @@
         "Suitable for GCCs, IT/ITES and enterprises consolidating workloads into shared DCs."
       ]
     },
+    "DARK_FIBER": {
+      "name": "Dark Fiber",
+      "pdf": "Dark_Fiber.pdf",
+      "talk_track": [
+        ""
+      ]
+    },
     "WIFI": {
       "name": "Wi-Fi",
       "pdf": "WiFi.pdf",
