@@ -1,21 +1,7 @@
-Timestamp,Client Name,Nam/Kam,Industry,Size,Annual Budget (INR),Products Already Sold,Recommended Products,Is Combined Pitch Generated
-2025-11-26 17:54:49,abc,xyz,Banking,200,10000000,SDWAN,"MPLS,ILL",1
-2025-11-26 18:45:47,abc,xyz,Banking,500,10000000,ILL,"SDWAN,MPLS",1
-2025-11-26 20:23:54,ABC,XYZ,Banking,200,10000000,ILL,"SDWAN,MPLS",1
-2025-11-26 20:25:32,XYZ,ABC,Banking,300,10000000,MPLS,"SDWAN,ILL",1
-2025-11-26 21:29:46,ABC,XYZ,Banking,200,10000000,ILL,"SDWAN,MPLS",1
-2025-11-27 11:33:28,ishu,ishu,Banking,50,10000000,SDWAN,"MPLS,ILL",1
-2025-12-02 17:01:20,ABCDEF,XYZ,Banks,High,200,10000000,MPLS,"SIP,ISDN_PRI_SERVICES",1
-2025-12-02 17:12:07,ABCDEF,XYZ,Banks,High,200,50000000,MPLS,"SIP,ISDN_PRI_SERVICES",1
-2025-12-02 17:21:45,qq,jj,Banks,High,300,10000000,SD_WAN,"MPLS,SIP,ISDN_PRI_SERVICES",1
-2025-12-02 17:23:46,qq,jj,Banks,Low,300,1000000,,"ILL,SD_WAN,MPLS",1
-2025-12-02 17:27:39,qq,jj,Banks,High,300,100000000,,"MPLS,SIP,ISDN_PRI_SERVICES",1
-2025-12-02 17:47:24,aa,bb,Banks,High,400,10000000,ILL,"MPLS,SD_WAN",1
-2025-12-02 18:29:21,fd,sd,Manufacturing,Medium,200,SIP,"MPLS,SD_WAN,ILL",1
-2025-12-02 18:33:19,sdof,njlkdnsk,E-Commerce,High,100,CCTV,"MPLS,SIP,BULK_SMS_CPAAS",1
-2025-12-02 18:47:21,sdjdsa,lksdk,Banks,Medium,400,MPLS,"SD_WAN,ILL",1
-2025-12-02 18:55:50,kfdkf,nlknkd,Coal,High,23,SD_WAN,"CNPN_PRIVATE_5G,MPLS,IOT",1
-2025-12-02 19:00:20,jjjjj,hhhhh,E-Commerce,Medium,99,ISDN_PRI_SERVICES,"SIP,BULK_SMS_CPAAS,MPLS",1
-2025-12-02 19:02:44,sfsfs,dcsdfs,Automotive Industry,Low,300,ISDN_PRI_SERVICES,"BULK_FTTH,IOT,MPLS",1
-2025-12-02 19:08:03,sfsfs,dcsdfs,Banks,Low,300,MPLS,"ILL,SD_WAN",1
-2025-12-02 19:10:52,ksksk,kskjsj,Banks,Low,400,ILL,"SD_WAN,MPLS",1
+timestamp,client_name,company_name,client_email,nam_name,nam_circle,industry,budget_band,size,products_already_sold,recommended_products,combined_pitch_generated
+2025-12-08 19:58:32,sss,sss,ishu@gmail.com,sss,ss,Automotive Industry,Low,,,"BULK_FTTH,IOT,MPLS",1
+2025-12-08 19:59:20,sss,sss,ishu@gmail.com,sss,ss,Automotive Industry,Low,,,"BULK_FTTH,IOT,MPLS",1
+2025-12-08 20:00:43,Ishu,Ishu,ishu@gmail.com,Yoyo,Haryana,Banks,Medium,300,MPLS,"SD_WAN,ILL",1
+2025-12-08 20:01:11,Ishu,Ishu,ishu@gmail.com,Yoyo,Haryana,Banks,Medium,300,MPLS,"SD_WAN,ILL",1
+2025-12-08 20:01:36,sksks,ksksk,ksks@ksk.com,ksks,ksks,Automotive Industry,Low,400,,"BULK_FTTH,IOT,MPLS",1
+2025-12-08 20:09:45,ajaja,jsjsj,,jsjs,jsjs,Banks,Medium,200,IoT,"SD_WAN,MPLS,ILL",1

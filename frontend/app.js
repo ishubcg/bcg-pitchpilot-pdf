@@ -1,5 +1,5 @@
-// const API_BASE = 'http://localhost:8000';
-const API_BASE = 'https://bcg-pitchpilot-backend.onrender.com';
+const API_BASE = 'http://localhost:8000';
+// const API_BASE = 'https://bcg-pitchpilot-backend.onrender.com';
 
 // const api = {
 //   async catalog() {
@@ -248,17 +248,22 @@ const API_BASE = 'https://bcg-pitchpilot-backend.onrender.com';
 
 const api = {
   async catalog() {
-    return (await fetch(`${API_BASE}/api/catalog`)).json();
+    const res = await fetch(`${API_BASE}/api/catalog`);
+    if (!res.ok) throw new Error('Failed to load catalog');
+    return res.json();
   },
+
   async recommend(payload) {
     const res = await fetch(`${API_BASE}/api/recommend`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
+
     if (!res.ok) throw new Error(await res.text());
     return res.json();
   },
+
   async generate(payload) {
     const res = await fetch(`${API_BASE}/api/generate`, {
       method: 'POST',
@@ -266,17 +271,32 @@ const api = {
       body: JSON.stringify(payload)
     });
     if (!res.ok) throw new Error(await res.text());
+
     const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+
     const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
+    a.href = url;
     a.download = "final_recommended_pitch.pdf";
+    document.body.appendChild(a);
     a.click();
+    a.remove();
+
+    URL.revokeObjectURL(url);
+    toast("final_recommended_pitch.pdf downloaded");
   }
 };
 
+// Allowed product IDs
 const allowedProducts = [
-  "MPLS","ILL","SDWAN","IoT",
-  "Dark_Fiber","VSAT","CNPN","Data_Center_Services"
+  "MPLS",
+  "ILL",
+  "SDWAN",
+  "IoT",
+  "Dark_Fiber",
+  "VSAT",
+  "CNPN",
+  "Data_Center_Services"
 ];
 
 const state = {
@@ -286,35 +306,46 @@ const state = {
 };
 
 
-// ---------- FIELD VALIDATION ----------
+// Toast
+function toast(message) {
+  const t = document.getElementById("toast");
+  t.querySelector("span").textContent = message;
+  t.classList.remove("hidden");
+  setTimeout(() => t.classList.add("hidden"), 2200);
+}
 
+
+// VALIDATION
 function validateForm() {
-  const client = document.getElementById("client_name");
-  const nam = document.getElementById("nam_name");
-  const ind = document.getElementById("industry");
-  const budget = document.getElementById("budget_band");
+  const requiredFields = [
+    "client_name",
+    "company_name",
+    "nam_name",
+    "nam_circle",
+    "industry",
+    "budget_band"
+  ];
 
-  const required = [client, nam, ind, budget];
-
-  let firstInvalid = null;
   let valid = true;
+  let firstInvalid = null;
 
-  required.forEach(el => {
+  requiredFields.forEach(id => {
+    const el = document.getElementById(id);
+
     if (!el.value.trim()) {
-      el.classList.add("border-red-500");
-      el.classList.add("bg-red-50");
-
-      if (!firstInvalid) firstInvalid = el;
+      if (el.dataset.touched === "true") {
+        el.classList.add("input-error");
+      }
       valid = false;
+      if (!firstInvalid) firstInvalid = el;
     } else {
-      el.classList.remove("border-red-500");
-      el.classList.remove("bg-red-50");
+      el.classList.remove("input-error");
     }
   });
 
   document.getElementById("btn-generate").disabled = !valid;
 
-  if (!valid && firstInvalid) {
+  if (!valid && firstInvalid && firstInvalid.dataset.touched === "true") {
     firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
@@ -322,24 +353,27 @@ function validateForm() {
 }
 
 
-// ---------- RENDER TAGS ----------
-
+// Render Sold Products
 function renderSoldTags() {
-  const container = document.getElementById('sold_products_tags');
-  container.innerHTML = '';
+  const container = document.getElementById("sold_products_tags");
+  container.innerHTML = "";
+
   state.soldProducts.forEach(id => {
     const name = state.productMap[id] || id;
-    const chip = document.createElement('div');
+
+    const chip = document.createElement("div");
     chip.className =
-      'inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-200 text-slate-800 text-xs font-medium';
+      "inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-200 text-slate-800 text-xs font-medium";
+
     chip.innerHTML = `
       <span>${name}</span>
-      <button type="button" class="text-slate-500" data-id="${id}">&times;</button>
+      <button type="button" data-id="${id}" class="text-slate-500">&times;</button>
     `;
+
     container.appendChild(chip);
   });
 
-  container.querySelectorAll('button[data-id]').forEach(btn => {
+  container.querySelectorAll("button[data-id]").forEach(btn => {
     btn.onclick = () => {
       state.soldProducts.delete(btn.dataset.id);
       renderSoldTags();
@@ -348,42 +382,41 @@ function renderSoldTags() {
 }
 
 
-// ---------- RENDER RECOMMENDATIONS + DOWNLOADS ----------
-
+// Render Recommendations + Buttons
 function renderRecommendations(data) {
   const panel = document.getElementById("reco-panel");
   const list = document.getElementById("reco-list");
   list.innerHTML = "";
 
-  // Recommended list
-  data.recommended.forEach((rec, i) => {
-    const block = document.createElement("div");
-    block.innerHTML = `
-      <div class="font-semibold">${i + 1}. ${rec.name}</div>
+  data.recommended.forEach((rec, idx) => {
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <div class="font-semibold">${idx + 1}. ${rec.name}</div>
       <ul class="list-disc pl-5 mt-1">
-        ${rec.talking_points.map(t => `<li>${t}</li>`).join("")}
+        ${rec.talking_points.map(tp => `<li>${tp}</li>`).join("")}
       </ul>
     `;
-    list.appendChild(block);
+    list.appendChild(div);
   });
 
-  // Download any product deck
-  const allSec = document.createElement("div");
-  allSec.className = "mt-8 border-t pt-4";
-  allSec.innerHTML = `
+  const downloadSec = document.createElement("div");
+  downloadSec.className = "mt-8 border-t pt-4";
+  downloadSec.innerHTML = `
     <h4 class="text-sm font-semibold mb-2">Download Any Product Pitch Deck</h4>
     <div id="all-product-buttons" class="flex flex-wrap gap-3"></div>
   `;
-  list.appendChild(allSec);
+  list.appendChild(downloadSec);
 
-  const btnContainer = allSec.querySelector("#all-product-buttons");
+  const btnContainer = downloadSec.querySelector("#all-product-buttons");
 
   allowedProducts.forEach(pid => {
     const pObj = state.allProducts.find(p => p.id === pid);
     const name = pObj ? pObj.name : pid.replace(/_/g, " ");
+
     const btn = document.createElement("button");
     btn.className =
       "px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-xl text-xs font-medium";
+
     btn.textContent = name;
     btn.onclick = () => {
       const a = document.createElement("a");
@@ -393,6 +426,7 @@ function renderRecommendations(data) {
       a.click();
       a.remove();
     };
+
     btnContainer.appendChild(btn);
   });
 
@@ -401,29 +435,29 @@ function renderRecommendations(data) {
 }
 
 
-// ---------- INIT ----------
-
+// INIT
 async function init() {
   const data = await api.catalog();
 
   state.allProducts = data.products || [];
 
-  // Industries
+  // Industry dropdown
   const indSel = document.getElementById("industry");
-  data.industries.forEach(ind => {
+  data.industries.forEach(i => {
     const opt = document.createElement("option");
-    opt.value = ind;
-    opt.textContent = ind;
+    opt.value = i;
+    opt.textContent = i;
     indSel.appendChild(opt);
   });
 
-  // Products already sold dropdown
+  // Sold product dropdown
   const soldSel = document.getElementById("sold_products_select");
   soldSel.innerHTML = `<option value="">Select a product to mark as sold</option>`;
 
   allowedProducts.forEach(pid => {
     const pObj = data.products.find(p => p.id === pid);
     const name = pObj ? pObj.name : pid.replace(/_/g, " ");
+
     state.productMap[pid] = name;
 
     const opt = document.createElement("option");
@@ -440,26 +474,45 @@ async function init() {
     }
   };
 
-  // Required field validation on input
-  ["client_name", "nam_name", "industry", "budget_band"].forEach(id => {
-    document.getElementById(id).addEventListener("input", validateForm);
-    document.getElementById(id).addEventListener("change", validateForm);
+  // Register validation triggers
+  [
+    "client_name",
+    "company_name",
+    "nam_name",
+    "nam_circle",
+    "industry",
+    "budget_band"
+  ].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener("input", () => {
+      el.dataset.touched = "true";
+      validateForm();
+    });
+    el.addEventListener("change", () => {
+      el.dataset.touched = "true";
+      validateForm();
+    });
   });
 
   validateForm();
 }
 
+
+// ACTION — Generate Pitch
 document.getElementById("btn-generate").onclick = async () => {
   if (!validateForm()) return;
 
   const payload = {
     client_name: document.getElementById("client_name").value.trim(),
+    company_name: document.getElementById("company_name").value.trim(),
+    client_email: document.getElementById("client_email").value.trim(),
     nam_name: document.getElementById("nam_name").value.trim(),
+    nam_circle: document.getElementById("nam_circle").value.trim(),
     industry: document.getElementById("industry").value,
     budget_band: document.getElementById("budget_band").value,
     size: document.getElementById("size").value || null,
-    bandwidth_mbps: 100,
     products_already_sold: Array.from(state.soldProducts),
+    bandwidth_mbps: 100
   };
 
   const err = document.getElementById("error");
