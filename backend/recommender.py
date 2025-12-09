@@ -89,7 +89,7 @@ def recommend_products(
     bandwidth_mbps: int,          # kept for compatibility, not used right now
     size: Optional[int],          # kept for compatibility, not used right now
     sold_ids: List[str],
-    top_n: int = 3,
+    top_n: int = 5,
 ) -> Dict[str, Any]:
     """
     Returns a dict with:

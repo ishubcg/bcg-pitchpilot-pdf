@@ -134,6 +134,7 @@ def catalog():
         ],
         "budget_bands": ["Low", "Medium", "High"]
     }
+    print("PRODUCT IDS:", list(PRODUCTS.keys()))
 
 
 @app.post("/api/recommend")

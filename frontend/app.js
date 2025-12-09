@@ -291,12 +291,12 @@ const api = {
 const allowedProducts = [
   "MPLS",
   "ILL",
-  "SDWAN",
-  "IoT",
-  "Dark_Fiber",
+  "SD_WAN",
+  "IOT",
+  "DARK_FIBER",
   "VSAT",
-  "CNPN",
-  "Data_Center_Services"
+  "CNPN_PRIVATE_5G",
+  "DATA_CENTRE_SERVICES"
 ];
 
 const state = {
@@ -412,6 +412,7 @@ function renderRecommendations(data) {
   allowedProducts.forEach(pid => {
     const pObj = state.allProducts.find(p => p.id === pid);
     const name = pObj ? pObj.name : pid.replace(/_/g, " ");
+    // const name = pObj ? pObj.name : pid;
 
     const btn = document.createElement("button");
     btn.className =
