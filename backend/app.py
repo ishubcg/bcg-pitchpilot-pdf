@@ -39,9 +39,22 @@ PRODUCT_FOLDER = (
 )
 
 # Lead tracker
-LEAD_BASE = "/data" if os.path.exists("/data") else BASE_DIR
-LEAD_TRACKER_DIR = os.path.join(LEAD_BASE, "lead_tracker")
+# LEAD_BASE = "/data" if os.path.exists("/data") else BASE_DIR
+# LEAD_TRACKER_DIR = os.path.join(LEAD_BASE, "lead_tracker")
+# LEAD_TRACKER_FILE = os.path.join(LEAD_TRACKER_DIR, "leads.csv")
+
+# Lead Tracker Directory (Use persistent disk if available)
+DISK_PATH = "/data"
+
+if os.path.exists(DISK_PATH):
+    LEAD_TRACKER_DIR = os.path.join(DISK_PATH, "lead_tracker")
+else:
+    # fallback for local development
+    LEAD_TRACKER_DIR = os.path.join(BASE_DIR, "lead_tracker")
+
+os.makedirs(LEAD_TRACKER_DIR, exist_ok=True)
 LEAD_TRACKER_FILE = os.path.join(LEAD_TRACKER_DIR, "leads.csv")
+
 
 SKELETON_FILE = "skeleton.pdf"
 
