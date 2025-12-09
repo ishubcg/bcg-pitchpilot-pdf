@@ -1,5 +1,5 @@
-// const API_BASE = 'http://localhost:8000';
-const API_BASE = 'https://bcg-pitchpilot-backend.onrender.com';
+const API_BASE = 'http://localhost:8000';
+// const API_BASE = 'https://bcg-pitchpilot-backend.onrender.com';
 
 // const api = {
 //   async catalog() {
@@ -296,7 +296,13 @@ const allowedProducts = [
   "DARK_FIBER",
   "VSAT",
   "CNPN_PRIVATE_5G",
-  "DATA_CENTRE_SERVICES"
+  "DATA_CENTRE_SERVICES",
+  "WIFI",
+  "SIP",
+  "CCTV",
+  "BULK_FTTH",
+  "BULK_SMS_CPAAS",
+  "ISDN_PRI_SERVICES"
 ];
 
 const state = {
