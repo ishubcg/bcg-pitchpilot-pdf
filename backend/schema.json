@@ -365,7 +365,7 @@
     },
 
     {
-      "industry": "Banks",
+      "industry": "Banks/Insurance/Financial Institutions",
       "budget": "Low",
       "logic": "Fixed order",
       "product_order": ["MPLS", "ILL", "SD_WAN"],
@@ -388,7 +388,7 @@
       }
     },
     {
-      "industry": "Banks",
+      "industry": "Banks/Insurance/Financial Institutions",
       "budget": "Medium",
       "logic": "Fixed order",
       "product_order": ["MPLS", "SD_WAN", "ILL"],
@@ -411,7 +411,7 @@
       }
     },
     {
-      "industry": "Banks",
+      "industry": "Banks/Insurance/Financial Institutions",
       "budget": "High",
       "logic": "Fixed order",
       "product_order": ["SD_WAN", "MPLS", "ILL"],
@@ -870,7 +870,7 @@
     },
 
     {
-      "industry": "Consumer Goods",
+      "industry": "FMCG",
       "budget": "Low",
       "logic": "Fixed order",
       "product_order": ["ILL", "BULK_FTTH", "MPLS", "SIP", "BULK_SMS_CPAAS"],
@@ -903,7 +903,7 @@
       }
     },
     {
-      "industry": "Consumer Goods",
+      "industry": "FMCG",
       "budget": "Medium",
       "logic": "Fixed order",
       "product_order": ["MPLS", "ILL", "BULK_FTTH", "SIP", "BULK_SMS_CPAAS"],
@@ -936,7 +936,7 @@
       }
     },
     {
-      "industry": "Consumer Goods",
+      "industry": "FMCG",
       "budget": "High",
       "logic": "Fixed order",
       "product_order": ["SD_WAN", "MPLS", "ILL", "SIP", "BULK_SMS_CPAAS"],

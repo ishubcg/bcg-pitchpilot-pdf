@@ -1,8 +1,12 @@
+// ------------------------------
+// API BASE URL
+// ------------------------------
 // const API_BASE = 'http://localhost:8000';
 const API_BASE = 'https://bcg-pitchpilot-backend.onrender.com';
 
-
-// All Products:
+// ------------------------------
+// API WRAPPER
+// ------------------------------
 const api = {
   async catalog() {
     const res = await fetch(`${API_BASE}/api/catalog`);
@@ -44,22 +48,13 @@ const api = {
   }
 };
 
-// Allowed product IDs
+// ------------------------------
+// Allowed Products
+// ------------------------------
 const allowedProducts = [
-  "MPLS",
-  "ILL",
-  "SD_WAN",
-  "IOT",
-  "DARK_FIBER",
-  "VSAT",
-  "CNPN_PRIVATE_5G",
-  "DATA_CENTRE_SERVICES",
-  "WIFI",
-  "SIP",
-  "CCTV",
-  "BULK_FTTH",
-  "BULK_SMS_CPAAS",
-  "ISDN_PRI_SERVICES"
+  "MPLS","ILL","SD_WAN","IOT","DARK_FIBER","VSAT","CNPN_PRIVATE_5G",
+  "DATA_CENTRE_SERVICES","WIFI","SIP","CCTV","BULK_FTTH",
+  "BULK_SMS_CPAAS","ISDN_PRI_SERVICES"
 ];
 
 const state = {
@@ -68,8 +63,9 @@ const state = {
   allProducts: []
 };
 
-
-// Toast
+// ------------------------------
+// Toast Function
+// ------------------------------
 function toast(message) {
   const t = document.getElementById("toast");
   t.querySelector("span").textContent = message;
@@ -77,14 +73,15 @@ function toast(message) {
   setTimeout(() => t.classList.add("hidden"), 2200);
 }
 
-
+// ------------------------------
 // VALIDATION
+// ------------------------------
 function validateForm() {
   const requiredFields = [
     "client_name",
     "company_name",
     "nam_name",
-    "nam_circle",
+    "nam_circle_search",   // UPDATED FIELD
     "industry",
     "budget_band"
   ];
@@ -115,8 +112,9 @@ function validateForm() {
   return valid;
 }
 
-
-// Render Sold Products
+// ------------------------------
+// Sold Product Tags
+// ------------------------------
 function renderSoldTags() {
   const container = document.getElementById("sold_products_tags");
   container.innerHTML = "";
@@ -144,8 +142,9 @@ function renderSoldTags() {
   });
 }
 
-
-// Render Recommendations + Buttons
+// ------------------------------
+// Render Recommendations
+// ------------------------------
 function renderRecommendations(data) {
   const panel = document.getElementById("reco-panel");
   const list = document.getElementById("reco-list");
@@ -162,6 +161,7 @@ function renderRecommendations(data) {
     list.appendChild(div);
   });
 
+  // Add product pitch downloads
   const downloadSec = document.createElement("div");
   downloadSec.className = "mt-8 border-t pt-4";
   downloadSec.innerHTML = `
@@ -175,7 +175,6 @@ function renderRecommendations(data) {
   allowedProducts.forEach(pid => {
     const pObj = state.allProducts.find(p => p.id === pid);
     const name = pObj ? pObj.name : pid.replace(/_/g, " ");
-    // const name = pObj ? pObj.name : pid;
 
     const btn = document.createElement("button");
     btn.className =
@@ -198,8 +197,56 @@ function renderRecommendations(data) {
   panel.scrollIntoView({ behavior: "smooth" });
 }
 
+// ------------------------------
+// NAM/KAM CIRCLE SEARCHABLE DROPDOWN
+// ------------------------------
+const CIRCLES = [
+  "Andhra Pradesh","Assam","Bihar","Chennai","Delhi",
+  "Gujarat","Haryana","Himachal Pradesh","Jammu & Kashmir",
+  "Karnataka","Kerala","Kolkata","Madhya Pradesh","Maharashtra",
+  "Mumbai","North East 1", "North East 2", "Odisha","Punjab","Rajasthan",
+  "Tamil Nadu","Uttar Pradesh (East)","Uttar Pradesh (West)",
+  "West Bengal", "Chhattisgarh", "Andaman & Nicobar", "Jharkhand", "Sikkim", "Telangana", "Uttarakhand", "CNTX N", "CNTX S"
+];
 
+const circleInput = document.getElementById("nam_circle_search");
+const dropdown = document.getElementById("circle_dropdown");
+
+function renderCircleOptions(filter = "") {
+  dropdown.innerHTML = "";
+
+  const filtered = CIRCLES.filter(c =>
+    c.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  filtered.forEach(circle => {
+    const option = document.createElement("div");
+    option.className = "px-4 py-2 hover:bg-slate-100 cursor-pointer text-sm";
+    option.textContent = circle;
+    option.onclick = () => {
+      circleInput.value = circle;
+      dropdown.classList.add("hidden");
+      circleInput.dataset.touched = "true";
+      validateForm();
+    };
+    dropdown.appendChild(option);
+  });
+
+  dropdown.classList.remove("hidden");
+}
+
+circleInput.addEventListener("click", () => renderCircleOptions(""));
+circleInput.addEventListener("input", () => renderCircleOptions(circleInput.value));
+
+document.addEventListener("click", (e) => {
+  if (!circleInput.contains(e.target) && !dropdown.contains(e.target)) {
+    dropdown.classList.add("hidden");
+  }
+});
+
+// ------------------------------
 // INIT
+// ------------------------------
 async function init() {
   const data = await api.catalog();
 
@@ -207,6 +254,7 @@ async function init() {
 
   // Industry dropdown
   const indSel = document.getElementById("industry");
+  indSel.innerHTML = `<option value="">Select an Industry</option>`;
   data.industries.forEach(i => {
     const opt = document.createElement("option");
     opt.value = i;
@@ -238,12 +286,12 @@ async function init() {
     }
   };
 
-  // Register validation triggers
+  // Validation triggers
   [
     "client_name",
     "company_name",
     "nam_name",
-    "nam_circle",
+    "nam_circle_search",
     "industry",
     "budget_band"
   ].forEach(id => {
@@ -261,8 +309,9 @@ async function init() {
   validateForm();
 }
 
-
-// ACTION — Generate Pitch
+// ------------------------------
+// Generate Pitch
+// ------------------------------
 document.getElementById("btn-generate").onclick = async () => {
   if (!validateForm()) return;
 
@@ -271,7 +320,7 @@ document.getElementById("btn-generate").onclick = async () => {
     company_name: document.getElementById("company_name").value.trim(),
     client_email: document.getElementById("client_email").value.trim(),
     nam_name: document.getElementById("nam_name").value.trim(),
-    nam_circle: document.getElementById("nam_circle").value.trim(),
+    nam_circle: document.getElementById("nam_circle_search").value.trim(),
     industry: document.getElementById("industry").value,
     budget_band: document.getElementById("budget_band").value,
     size: document.getElementById("size").value || null,
