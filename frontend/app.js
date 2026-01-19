@@ -81,7 +81,7 @@ function validateForm() {
     "client_name",
     "company_name",
     "nam_name",
-    "nam_circle_search",   // UPDATED FIELD
+    "nam_circle",   // UPDATED FIELD
     "industry",
     "budget_band"
   ];
@@ -331,7 +331,7 @@ async function init() {
     "client_name",
     "company_name",
     "nam_name",
-    "nam_circle_search",
+    "nam_circle",
     "industry",
     "budget_band"
   ].forEach(id => {
@@ -360,7 +360,7 @@ document.getElementById("btn-generate").onclick = async () => {
     company_name: document.getElementById("company_name").value.trim(),
     client_email: document.getElementById("client_email").value.trim(),
     nam_name: document.getElementById("nam_name").value.trim(),
-    nam_circle: document.getElementById("nam_circle_search").value.trim(),
+    nam_circle: document.getElementById("nam_circle").value.trim(),
     industry: document.getElementById("industry").value,
     budget_band: document.getElementById("budget_band").value,
     size: document.getElementById("size").value || null,
