@@ -135,12 +135,18 @@ def log_lead(req: GenerateRequest, recommended_products: List[dict], combined_ge
 
 @app.get("/api/catalog")
 def catalog():
+    inds = list(INDUSTRIES)
+    if "Others" not in inds:
+        inds.append("Others")
+        inds.sort()
+
     return {
         "products": [
             {"id": pid, "name": p.name}
             for pid, p in PRODUCTS.items()
         ],
-        "industries": INDUSTRIES,
+        # "industries": INDUSTRIES,
+        "industries": inds,
         "product_ids": [
             {"id": pid, "name": PRODUCTS[pid].name}
             for pid in ALL_PRODUCT_IDS
@@ -152,6 +158,23 @@ def catalog():
 
 @app.post("/api/recommend")
 def api_recommend(req: RecommendRequest):
+    # Special case: Others
+    if req.industry == "Others":
+        return {
+            "industry": "Others",
+            "budget_band": req.budget_band,
+            "logic": "All Products Combined",
+            "recommended": [
+                {
+                    "id": pid,
+                    "name": PRODUCTS[pid].name,
+                    "pdf": PRODUCTS[pid].pdf,
+                    "talking_points": []
+                }
+                for pid in ALL_PRODUCT_IDS
+            ]
+        }
+    
     result = recommend_products(
         req.industry,
         req.budget_band,
@@ -167,31 +190,44 @@ def api_recommend(req: RecommendRequest):
 
 @app.post("/api/generate")
 def generate(req: GenerateRequest):
-    result = recommend_products(
-        req.industry,
-        req.budget_band,
-        req.bandwidth_mbps,
-        req.size,
-        req.products_already_sold
-    )
-
-    recs = result["recommended"]
-    if not recs:
-        raise HTTPException(400, "No recommended products found.")
 
     skeleton_full = os.path.join(PRODUCT_FOLDER, SKELETON_FILE)
+    if not os.path.exists(skeleton_full):
+        raise HTTPException(500, "Skeleton PDF not found")
 
-    # Industry page
-    industry_pdf_name = industry_to_pdf_name(result["industry"])
-    industry_full = os.path.join(PRODUCT_FOLDER, industry_pdf_name)
-    if not os.path.exists(industry_full):
+    # ---------- OTHERS ----------
+    if req.industry == "Others":
+        product_paths = [
+            os.path.join(PRODUCT_FOLDER, PRODUCTS[pid].pdf)
+            for pid in ALL_PRODUCT_IDS
+            if pid in PRODUCTS
+        ]
         industry_full = None
+        recommended = [{"id": pid} for pid in ALL_PRODUCT_IDS]
 
-    product_paths = [
-        os.path.join(PRODUCT_FOLDER, r["pdf"])
-        for r in recs
-    ]
+    # ---------- NORMAL FLOW ----------
+    else:
+        result = recommend_products(
+            req.industry,
+            req.budget_band,
+            req.bandwidth_mbps,
+            req.size,
+            req.products_already_sold
+        )
 
+        recommended = result["recommended"]
+
+        product_paths = [
+            os.path.join(PRODUCT_FOLDER, r["pdf"])
+            for r in recommended
+        ]
+
+        industry_pdf_name = industry_to_pdf_name(req.industry)
+        industry_full = os.path.join(PRODUCT_FOLDER, industry_pdf_name)
+        if not os.path.exists(industry_full):
+            industry_full = None
+
+    # ---------- MERGE PDFs ----------
     tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
     tmp_path = tmp.name
     tmp.close()
@@ -203,7 +239,7 @@ def generate(req: GenerateRequest):
         out_path=tmp_path
     )
 
-    log_lead(req, recs, True)
+    log_lead(req, recommended, True)
 
     return FileResponse(
         tmp_path,

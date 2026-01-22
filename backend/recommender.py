@@ -87,6 +87,10 @@ MATRIX: List[Dict[str, Any]] = _schema.get("industry_budget_matrix", [])
 # For Dropdown Lists
 # -------------------------
 INDUSTRIES: List[str] = sorted({row["industry"] for row in MATRIX})
+if "Others" not in INDUSTRIES:
+    INDUSTRIES.append("Others")
+    INDUSTRIES.sort()
+
 ALL_PRODUCT_IDS: List[str] = sorted(PRODUCTS.keys())
 
 
